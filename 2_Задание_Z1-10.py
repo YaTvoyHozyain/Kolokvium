@@ -17,3 +17,13 @@ def POZ_Z_D(b, n, a):
 def TRANS_N_Z(A):
     A = [0] + A
     return A
+
+# Z-5
+# Преобразование целого неотрицательного числа в натуральное
+def TRANS_Z_N(A):
+    Str=A[:]
+    if Str[0] == 0:
+        Str.remove(Str[0])
+    elif Str[0] != 0:
+        print("Error: Z-5")
+    return Str
