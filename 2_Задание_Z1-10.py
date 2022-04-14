@@ -110,3 +110,22 @@ def MUL_ZZ_Z(b1, n1, A1, b2, n2, A2):
     for x in range(n3):
         A3.append(int(str(c)[x]))
     return(b3, n3, A3)
+# Z - 9
+def DIV_ZZ_Z(b, A, c, B):
+    # b - знак первого числа A - массив цифр первого числа
+    # с - знак второго числа B - массив цифр второго числа
+    n = POZ_Z_D(A)
+    m = POZ_Z_D(B)
+    A = ABS_Z_N(A)
+    B = ABS_Z_N(B)
+    t = DIV_NN_N(A, B)
+    if n == m:
+        return TRANS_N_Z(t)
+    elif MOD_NN_N(A, B)[1] != [0]:
+        t = TRANS_N_Z(ADD_1N_N(t))
+        t[0] += 1
+        return t
+    else:
+        t = TRANS_N_Z(t)
+        t[0] += 1
+        return t
