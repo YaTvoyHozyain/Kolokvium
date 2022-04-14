@@ -84,6 +84,36 @@ def ADD_1N_N(k, a):
     a = int(''.join(map(str, a)))
     return k, a
 
+# N-4
+# Сложение  натуральных чисел
+def ADD_NN_N(A, B):
+    # Если первое число больше второго, то меняем их местами
+    if COM_NN_D(A, B) == 2:
+        C = B
+        B = A
+        A = C
+    k = len(B) - len(A)
+    A.reverse()
+    # Дополняем нулями разряды меньшего числа до разрядов большего
+    for i in range(0, k + 1, 1):
+        A.append(0)
+    A.reverse()
+    B.reverse()
+    B.append(0)
+    B.reverse()
+    # Процесс сложения чисел
+    for i in range(len(B) - 1, 0, -1):
+        # Если суума цифр больше десяти,
+        # то переносим единицу в старший разряд
+        if B[i] + A[i] >= 10:
+            B[i] = (B[i] + A[i]) % 10
+            B[i - 1] += 1
+        else:
+            B[i] = B[i] + A[i]
+    if B[0] == 0:
+        B.remove(0)
+    return B
+
 # N- 5
 # Вычитание из первого большего натурального числа
 # второго меньшего или равного
@@ -151,6 +181,23 @@ def MUL_Nk_N(A, k):
         # Цикл по степени десятки, добавляет k нулей в конец массива
         A.append(0)
     return A
+
+# N-8
+# Умножение натуральных чисел
+def MUL_NN_N(A, B):
+    result = []
+    B.reverse()
+    B.append(0)
+    for i in range(len(B)):
+        # Умножаем исходное число на текущий разряд
+        temp = MUL_ND_N(list(A), B[i])
+        # Умноженаем результат на 10^i, чтобы "сдвинуть" его
+        temp = MUL_Nk_N(list(temp), i)
+        # добавляем к результату
+        result = ADD_NN_N(list(result), temp)
+    if result[0] == 0:
+        del result[0]
+    return result
 
 # N-10
 # Вычисление первой цифры деления, умноженное на 10^k, k - номер позиции цифры.
