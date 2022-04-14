@@ -44,6 +44,16 @@ def TRANS_Q_Z(A,B):
         # Если количество элементов больше чем количество нулевых элементов на единицу
         # и последний элемент знаменателя равен единице,то возвращаем только числитель
         return A
+# Q-5
+# Сложение дробей
+def ADD_QQ_Q(A, B, C, D):
+    tempB = B.copy()
+    tempD = D.copy()
+    sum3 = MUL_NN_N(tempB, tempD)
+    sum1 = MUL_ZZ_Z(A, TRANS_N_Z(D))
+    sum2 = MUL_ZZ_Z(TRANS_N_Z(B), C)
+    temp = ADD_ZZ_Z(sum1, sum2)
+    return RED_Q_Q([temp, sum3])
 
 # Q - 6 - вычитание дробей
 def SUB_QQ_Q(q1, k1, q2, k2):
