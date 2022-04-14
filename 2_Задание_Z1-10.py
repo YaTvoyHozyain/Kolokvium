@@ -30,3 +30,27 @@ def TRANS_Z_N(a):
     elif Str[0] != 0:
         print("Error: Z-5")
     return Str
+
+# Z - 8 - умножение целых чисел
+def MUL_ZZ_Z(b1, n1, A1, b2, n2, A2):
+    # из массива A1 и A2 делаем сначала строки, а потом числа
+    str1 = ""
+    str2 = ""
+    for x in range(n1):
+        str1 += str(A1[x])
+    for x in range(n2):
+        str2 += str(A2[x])
+    a = int(str1)
+    b = int(str2)
+    c = a * b # умножение двух чисел в натуральном виде, знаки пока не учитываются (здесь вместо * должна быть функция умножения натуральных чисел MUL_NN_N)
+    n3 = len(str(c))# n3 - номер старшего разряда получившегося числа, он же равен количесту цифр в числе
+    # далее учитываются знаки чисел, поданных на вход, из этой информации получаем знак нового числа - b3
+    if (POZ_Z_D(b1, n1, A1) == 2 and POZ_Z_D(b2, n2, A2) == 2) or (POZ_Z_D(b1, n1, A1) == 1 and POZ_Z_D(b2, n2, A2) == 1) or POZ_Z_D(b1, n1, A1) == 0 or POZ_Z_D(b2, n2, A2) == 0:
+        b3 = 0
+    elif (POZ_Z_D(b1, n1, A1) == 2 and POZ_Z_D(b2, n2, A2) == 1) or (POZ_Z_D(b1, n1, A1) == 1 and POZ_Z_D(b2, n2, A2) == 2):
+        b3 = 1
+    # из числа делаем массив его цифр
+    A3 = []
+    for x in range(n3):
+        A3.append(int(str(c)[x]))
+    return(b3, n3, A3)
