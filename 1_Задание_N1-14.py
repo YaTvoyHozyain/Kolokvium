@@ -50,6 +50,15 @@ def COM_NN_D(A, B):
                 return 2
             else:
                 return 1
+            
+# N-2
+# Проверка на ноль. Если ноль есть - выдаем "No", если есть - выдаем "Yes"
+def NZER_N_B(i):
+    if i[0] != 0:
+        print("Yes")
+    else:
+        print("No")
+        
 # N- 3
 # k - количество разрядов, a - массив цифр числа
 def ADD_1N_N(k, a):
@@ -142,6 +151,43 @@ def MUL_Nk_N(A, k):
         # Цикл по степени десятки, добавляет k нулей в конец массива
         A.append(0)
     return A
+
+# N-10
+# Вычисление первой цифры деления, умноженное на 10^k, k - номер позиции цифры.
+# Преобразование массивов в числа, перемещение большего числа на первое место,
+# нахождение самого числа, ее позиции и результата.
+def DIV_NN_Dk(i, y):
+    count = 1
+    if COM_NN_D(i, y) == 0:
+        return 1, 0
+    if COM_NN_D(i, y) == 1:
+        big = y
+        small = i
+    else:
+        big = i
+        small = y
+    k = 0
+    n3 = small
+    tm = small.copy()
+    while COM_NN_D(big, n3) == 2:
+        k += 1
+        n3 = MUL_Nk_N(tm, k)
+        tm = small.copy()
+    k -= 1
+    tm = small.copy()
+    n3 = MUL_Nk_N(tm, k)
+    small = n3
+    tm = small.copy()
+    while COM_NN_D(big, n3) == 2:
+        count += 1
+        n3 = MUL_ND_N(tm, count)
+        tm = small.copy()
+    if COM_NN_D(big, n3) != 0:
+        count -= 1
+    if count == 10:
+        count = 1
+        k += 1
+    return count, k
 
 # N-11
 def DIV_NN_N(a, k, b, n):
