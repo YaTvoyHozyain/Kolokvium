@@ -21,6 +21,18 @@ def RED_Q_Q(b1, n1, A1, n2, A2):
             Q = ( (Q1, Q2) )
         return Q
 
+# Q-2
+# Проверка на целое, если рациональное число является целым, то <да>, иначе <нет>
+def INT_Q_B(A, B):
+    if len(B) == 1 and B[0] == 1:
+        return True
+    elif len(A) == 1 and A[0] == 0:
+        return True
+    elif A == B:
+        return True
+    else:
+        return False
+
 # Q-3    
 # Преобразование целого в дробное
 def TRANS_Z_Q(a):
