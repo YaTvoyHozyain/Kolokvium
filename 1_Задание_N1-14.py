@@ -4,7 +4,7 @@
 def COM_NN_D(A, B):
     # находим первый ненулевой элемент в первом числе
     i = 0
-    while A[i] == 0 and i != len(A):
+    while A[i] == 0 and i + 1 != len(A):
         i += 1
     # если количество пройденных элементов равно длине массива,
     # то число - ноль
@@ -16,10 +16,9 @@ def COM_NN_D(A, B):
         # где len1 - длина нового массива
         len1 = len(A) - i
         A1 = A[i:]
-
     # аналогично работаем со вторым числом
     i = 0
-    while B[i] == 0 and i != len(B):
+    while B[i] == 0 and i + 1 != len(B):
         i += 1
     if i == len(B):
         B1 = [0]
@@ -27,7 +26,6 @@ def COM_NN_D(A, B):
     else:
         len2 = len(B) - i
         B1 = B[i:]
-
     # сравниваем длину чисел, которое длиннее - больше
     if len1 > len2:
         return 2
@@ -50,6 +48,7 @@ def COM_NN_D(A, B):
                 return 2
             else:
                 return 1
+
             
 # N-2
 # Проверка на ноль. Если ноль есть - выдаем "No", если есть - выдаем "Yes"
@@ -185,6 +184,7 @@ def MUL_Nk_N(A, k):
 # N-8
 # Умножение натуральных чисел
 def MUL_NN_N(A, B):
+    k  = 0
     result = []
     B.reverse()
     B.append(0)
@@ -194,10 +194,14 @@ def MUL_NN_N(A, B):
         # Умноженаем результат на 10^i, чтобы "сдвинуть" его
         temp = MUL_Nk_N(list(temp), i)
         # добавляем к результату
-        result = ADD_NN_N(list(result), temp)
+        if len(result) != 0:
+            result = ADD_NN_N(list(result), temp)
+        else:
+            result = list(temp)
     if result[0] == 0:
         del result[0]
     return result
+
 
 # N-9
 def SUB_NDN_N(A, B, n):
