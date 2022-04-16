@@ -154,7 +154,7 @@ def MUL_ZZ_Z(b1, n1, A1, b2, n2, A2):
     return(b3, n3, A3)
 
 
-# Z - 9
+# Z - 9 - частное от деления целого на целое
 def DIV_ZZ_Z(b, A, c, B):
     # b - знак первого числа A - массив цифр первого числа
     # с - знак второго числа B - массив цифр второго числа
@@ -173,3 +173,14 @@ def DIV_ZZ_Z(b, A, c, B):
         t = TRANS_N_Z(t)
         t[0] += 1
         return t
+#Z-10 - остаток от деления целого на целое
+def MOD_ZZ_Z(a,n1, A, b,n2, B):
+    # a,b - знаки чисел, A,B- массивы
+    res = MOD_NN_N(A,n1, B,n2)
+    if a==b:
+        return TRANS_N_Z(res)
+    elif a==1:
+        res = TRANS_N_Z(ADD_1N_N(res))
+        return res
+    else:
+        return res
