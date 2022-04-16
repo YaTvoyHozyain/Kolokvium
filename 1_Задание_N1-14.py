@@ -54,9 +54,9 @@ def COM_NN_D(A, B):
 # Проверка на ноль. Если ноль есть - выдаем "No", если нет - выдаем "Yes"
 def NZER_N_B(i):
     if i[0] != 0:
-        print("Yes")
+        return "Yes"
     else:
-        print("No")
+        return "No"
         
 # N- 3
 # k - количество разрядов, a - массив цифр числа
