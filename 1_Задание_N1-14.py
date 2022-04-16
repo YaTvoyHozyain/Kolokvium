@@ -62,7 +62,6 @@ def NZER_N_B(i):
 # N- 3
 # k - количество разрядов, a - массив цифр числа
 def ADD_1N_N(k, a):
-    k -= 1
     a.reverse()
     if a[0] < 9:
         # Если последняя цифра числа < 9, то добавляем единицу
@@ -82,8 +81,12 @@ def ADD_1N_N(k, a):
             # К первому разряду, не равному 9, добавляем единицу
         a[i] += 1
     a.reverse()
-    a = int(''.join(map(str, a)))
-    return (k, a)
+    a = ''.join(map(str, a))
+    c=[0]*len(a)
+    for i in range (len(a)):
+        c[i]=int(a[i])
+
+    return (k, c)
 
 # N-4
 # Сложение  натуральных чисел
