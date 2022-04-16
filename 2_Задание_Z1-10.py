@@ -87,6 +87,55 @@ def ADD_ZZ_Z(A, B):
                 result = MUL_ZM_Z(result)
     return result
 
+
+# Z-7 вычитание целых чисел
+def SUB_ZZ_Z (A, b1, n1, B, b2, n2):
+    # Рассмотрим разные случаи:
+    # 1) a > 0   b > 0
+    if(POZ_Z_D(b1, n1, A) == 2 and POZ_Z_D(b2, n2, B) == 2):
+        if COM_NN_D(A, B) == 0:
+            return 0
+        if (COM_NN_D(A, B) == 2) or (COM_NN_D(A, B) == 1):
+            SUB_NN_N(A, B)
+            if COM_NN_D(A, B) == 1:
+                MUL_ZM_Z(A,b1)
+            return A
+    # 2) a < 0   b < 0
+    if(POZ_Z_D(b1, n1, A) == 1 and POZ_Z_D(b2, n2, B) == 1):
+        if COM_NN_D(A, B) == 0:
+            return 0
+        if (COM_NN_D(A, B) == 2) or (COM_NN_D(A, B) == 1):
+            SUB_NN_N(A, B)
+            if COM_NN_D(A, B) == 1:
+                MUL_ZM_Z(A,b1)
+            return A
+    # 3) a > 0   b < 0
+    if(POZ_Z_D(b1, n1, A) == 2 and POZ_Z_D(b2, n2, B) == 1):
+        ADD_NN_N(A, B)
+        return B
+    # 4) a < 0   b > 0
+    if(POZ_Z_D(b1, n1, A) == 1 and POZ_Z_D(b2, n2, B) == 2):
+        ADD_NN_N(A, B)
+        MUL_ZM_Z(B,b2)
+        return B
+    # 5) a = 0   b > 0
+    if(POZ_Z_D(b1, n1, A) == 0 and POZ_Z_D(b2, n2, B) == 2):
+        MUL_ZM_Z(B,b2)
+        return B
+    # 6) a = 0   b < 0
+    if(POZ_Z_D(b1, n1, A) == 0 and POZ_Z_D(b2, n2, B) == 1):
+        MUL_ZM_Z(B,b2)
+        return B
+    # 7) a > 0   b = 0
+    if(POZ_Z_D(b1, n1, A) == 2 and POZ_Z_D(b2, n2, B) == 0):
+        return A
+    # 8) a < 0   b = 0
+    if(POZ_Z_D(b1, n1, A) == 1 and POZ_Z_D(b2, n2, B) == 0):
+        return A
+    # 9) a = 0   b = 0
+     if(POZ_Z_D(b1, n1, A) == 0 and POZ_Z_D(b2, n2, B) == 0):
+        return 0
+    
 # Z - 8 - умножение целых чисел
 def MUL_ZZ_Z(b1, n1, A1, b2, n2, A2):
     # если одно из чисел - 0, то новое число тоже 0, иначе перемножаем модули чисел
