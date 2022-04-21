@@ -73,17 +73,57 @@ def ADD_QQ_Q(A, B, C, D):
 
 # Q - 6 - вычитание дробей
 def SUB_QQ_Q(q1, k1, q2, k2):
-    # приведение к общему знаменателю обоих чисел
-    q1 = q1 * k2 # (здесь и в двух последующих выражениях вместо * должна быть функция умножения натуральных чисел MUL_NN_N)
-    q2 = q2 * k1 
-    k3 = k1 * k2
-    # вычитание второго числителя из первого
-    q3 = q1 - q2 #здесь должна быть функция вычитания целых чисел SUB_ZZ_Z
-    # сокращение получившейся дроби
-    g = math.gcd(k3, q3)#(это и три следующих выражения надо заменить на одно с функцией сокращения дроби RED_Q_Q)
-    k3 = k3 // g
-    q3 = q3 // g
-    return (q3, k3)
+    #определение знаков и приведение чисел к виду массива(числители и знаменатели)
+    Q1 = []
+    Q2 = []
+    K1 = []
+    K2 = []
+    if(str(q1)[0] == "-"):
+        bq1 = 1
+        nq1 = len(str(q1))-1
+        for x in range(1, len(str(q1))):
+            Q1.append(int(str(q1)[x]))
+    else:
+        bq1 = 0
+        nq1 = len(str(q1))
+        for x in str(q1):
+            Q1.append(int(x))
+    if(str(q2)[0] == "-"):
+        bq2 = 1
+        nq2 = len(str(q2))-1
+        for x in range(1, len(str(q2))):
+            Q2.append(int(str(q2)[x]))
+    else:
+        bq2 = 0
+        nq2 = len(str(q2))
+        for x in str(q2):
+            Q2.append(int(x))
+    bk1 = 0
+    bk2 = 0
+    nk1 = len(str(k1))
+    nk2 = len(str(k2))
+    for k in str(k1):
+        K1.append(int(k))
+    for k in str(k2):
+        K2.append(int(k))
+    #умножение первого числителя на второй знаменатель
+    bq1,nq1,Q1 = MUL_ZZ_Z(bq1,nq1,Q1,bk2,nk2,K2)
+    #перемножение знаменателей
+    K3 = MUL_NN_N(K1, K2)
+    #умножение второгт числителя на первый знаменатель
+    bq2,nq2,Q2 = MUL_ZZ_Z(bq2,nq2,Q2,bk1,nk1,K1)
+    #вычитание второго числителя из первого
+    Q3 = SUB_ZZ_Z(Q1, bq1, nq1, Q2, bq2, nq2)
+    strk3 = ""
+    strq3 = ""
+    for x in K3:
+        strk3 += str(x)
+    for x in Q3:
+        strq3 += str(x)
+    K3 = int(strk3)
+    Q3 = int(strq3)
+    #сокращение получившейся дроби
+    return RED_Q_Q(Q3, K3) 
 
 
 # Q-7: умножение дробей
