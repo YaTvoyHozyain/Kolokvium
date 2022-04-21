@@ -49,7 +49,7 @@ def COM_NN_D(A, B):
             else:
                 return 1
 
-            
+
 # N-2
 # Проверка на ноль. Если ноль есть - выдаем "No", если нет - выдаем "Yes"
 def NZER_N_B(i):
@@ -57,7 +57,7 @@ def NZER_N_B(i):
         return "Yes"
     else:
         return "No"
-        
+
 
 # N- 3
 # k - количество разрядов, a - массив цифр числа
@@ -82,11 +82,12 @@ def ADD_1N_N(k, a):
         a[i] += 1
     a.reverse()
     a = ''.join(map(str, a))
-    c=[0]*len(a)
-    for i in range (len(a)):
-        c[i]=int(a[i])
+    c = [0] * len(a)
+    for i in range(len(a)):
+        c[i] = int(a[i])
 
     return (k, c)
+
 
 # N-4
 # Сложение  натуральных чисел
@@ -117,6 +118,7 @@ def ADD_NN_N(A, B):
     if B[0] == 0:
         B.remove(0)
     return B
+
 
 # N- 5
 # Вычитание из первого большего натурального числа
@@ -155,6 +157,7 @@ def SUB_NN_N(A, B):
 
     return A
 
+
 # N-6 Умножение натурального числа на цифру:
 def MUL_ND_N(A, n):
     A.reverse()
@@ -179,6 +182,7 @@ def MUL_ND_N(A, n):
         A.remove(0)
     return A
 
+
 # N-7 Умножение натурального числа на 10^k
 def MUL_Nk_N(A, k):
     for i in range(k):
@@ -186,10 +190,11 @@ def MUL_Nk_N(A, k):
         A.append(0)
     return A
 
+
 # N-8
 # Умножение натуральных чисел
 def MUL_NN_N(A, B):
-    k  = 0
+    k = 0
     result = []
     B.reverse()
     B.append(0)
@@ -213,6 +218,7 @@ def MUL_NN_N(A, B):
 def SUB_NDN_N(A, B, n):
     t = SUB_NN_N(A, MUL_ND_N(B, n))
     return t
+
 
 # N-10
 # Вычисление первой цифры деления, умноженное на 10^k, k - номер позиции цифры.
@@ -249,84 +255,104 @@ def DIV_NN_Dk(i, y):
     if count == 10:
         count = 1
         k += 1
-    return count, k
+    bb = [count]
+    df = MUL_Nk_N(bb, k)
+
+    return df
+
 
 # N-11
-#Частное от деления большего натурального числа на 
-#меньшее или равное натуральное с остатком(делитель отличен от нуля)
-def DIV_NN_N(a, k, b, n):
-    # k - количество разрядов, a - массив цифр числа
-    # n - количество разрядов, b - массив цифр числа
-    m = DIV_NN_Dk(a, b)
-    div = [0] * m[1]
-    num = 0
-    # Пусть a >= b
-    # Тогда, если на вход задаются числа, не удовлетворяющие этому словию,
-    # значения меняются местами
-    if (k < n) or (k == n and a[k-1] < b[n-1]):
-        a, b = b, a
-        k, n = n, k
-    # Частное от деления a на b
-    while (COM_NN_D(a, k, b, n) == 2) or (COM_NN_D(a, k, b, n) == 0):
-        c = DIV_NN_Dk(a, k, b, n)
-        mul = MUL_NN_N(b, n, c[0], c[1])
-        a = SUB_NDN_N(a, k, mul[0], mul[1])
-        a = a[0]
-        div = ADD_NN_N(div, c[0])
-        num += 1
-    return num, div[0]
-
+# Частное от деления большего натурального числа на
+# меньшее или равное натуральное с остатком(делитель отличен от нуля)
+def DIV_NN_N(a, b):
+    if a!=b:
+        # k - количество разрядов, a - массив цифр числа
+        # n - количество разрядов, b - массив цифр числа
+        m = DIV_NN_Dk(a, b)
+        div = [0] * len(m)
+        # Пусть a >= b
+        # Тогда, если на вход задаются числа, не удовлетворяющие этому словию,
+        # значения меняются местами
+        if (len(a) < len(b)) or (len(a) == len(b) and a[0] < b[0]):
+            a, b = b, a
+        # Частное от деления a на b
+        while (COM_NN_D(a, b) == 2) or (COM_NN_D(a, b) == 0):
+            c = DIV_NN_Dk(a, b)
+            mul = MUL_NN_N(b, c)
+            c = DIV_NN_Dk(a, b)
+            a = SUB_NN_N(a, mul)
+            div = ADD_NN_N(div, c)
+        return div
+    else:
+        return [1]
 # N-12
-#Остаток от деления большего натурального числа на меньшее 
+#Остаток от деления большего натурального числа на меньшее
 #или равное натуральное с остатком(делитель отличен от нуля)
-def MOD_NN_N(a,k,b,n):
-    # k - количество разрядов, a - массив цифр числа
-    # n - количество разрядов, b - массив цифр числа
-    # Пусть a >= b
-    # Тогда, если на вход задаются числа, не удовлетворяющие этому словию,
-    # значения меняются местами
-    if (k < n) or (k == n and a[k - 1] < b[n - 1]):
-        a, b = b, a
-        k, n = n, k
-    c = DIV_NN_N(a, k, b, n)
-    mul = MUL_NN_N(n, b, c[1], c[0])
-    mod = SUB_NDN_N(a, k, mul[0], mul[1])
-    return mod
-
+def MOD_NN_N(a, b):
+    if a != b:
+        k=[0]
+        n=[0]
+        # k - количество разрядов, a - массив цифр числа
+        # n - количество разрядов, b - массив цифр числа
+        # Пусть a >= b
+        # Тогда, если на вход задаются числа, не удовлетворяющие этому словию,
+        # значения меняются местами
+        if (len(a) < len(b)) or (len(a) == len(b) and a[0] < b[0]):
+            a, b = b, a
+        k = [0]*len(a)
+        n = [0]*len(b)
+        for i in range (len(a)):
+            k[i]=a[i]
+        for i in range(len(b)):
+            n[i]=b[i]
+        c = DIV_NN_N(k, n)
+        mul = MUL_NN_N(b, c)
+        mod = SUB_NN_N(a, mul)
+        return mod
+    else:
+        return [0]
 # N-13
 # НОД натуральных чисел
 def GCF_NN_N(A, B):
-    #Вычисление НОД натуральных чисел
-    #Проверка на ноль
-    if(NZER_N_B(A) == "No" and NZER_N_B(B) == "No"):
-        #Сравнение чисел
+    # Вычисление НОД натуральных чисел
+    # Проверка на ноль
+    if (NZER_N_B(A) == "Yes" and NZER_N_B(B) == "Yes"):
+        # Сравнение чисел
         temp = COM_NN_D(A, B)
-        #Если первое число меньше второго -
-        #меняем их местами (а также их коэффициенты)
-        if(temp == 1):
+        # Если первое число меньше второго -
+        # меняем их местами
+        if (temp == 1):
             A, B = B, A
-            n, k = k, n
             temp = 2
-        #Если первое число больше второго -
-        #вычисляем НОД с помощью алгоритма
-        #Евклида
-        if(temp == 2):
-            while(rem[0] != 0):
-                rem = MOD_NN_N(A, k, B, n)
-                A = B 
+        # Если первое число больше второго -
+        # вычисляем НОД с помощью алгоритма
+        # Евклида
+        rem=[0]
+        if (temp == 2):
+            while (B[0] != 0):
+                rem=MOD_NN_N(A, B)
+                A = B
                 B = rem
-            print(A)
-        #Если числа равны - любое из них
-        #и есть их НОД
-        if(temp == 0):
-            print(B)
-    #Если какое-то из чисел равно нулю, тогда 
-    #НОД у них нет
+            return A
+        # Если числа равны - любое из них
+        # и есть их НОД
+        if (temp == 0):
+            return B
+    # Если какое-то из чисел равно нулю, тогда
+    # НОД у них нет
     else:
-        print("No common dividers")
+        return ("No common dividers")
+
         
 # N-14
 #НОК натуральных чисел
 def LCM_NN_N(A, B):
-    t = DIV_NN_N(MUL_NN_N(A, B), GCF_NN_N(A,B))
+    k = [0] * len(A)
+    n = [0] * len(B)
+    for i in range(len(A)):
+        k[i] = A[i]
+    for i in range(len(B)):
+        n[i] = B[i]
+    #НОК(a, b)=a·b:НОД(a, b).
+    t = DIV_NN_N(MUL_NN_N(k, n), GCF_NN_N(A, B))
     return t
