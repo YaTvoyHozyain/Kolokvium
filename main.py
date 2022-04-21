@@ -1,6 +1,8 @@
 import tkinter as tk
 import Natural as nat
 import Integer as itg
+import Rational as rt
+import Polynomial as pl
 
 root = tk.Tk()
 root.title("Система Компьютерной Алгебры")
