@@ -135,7 +135,8 @@ def SUB_ZZ_Z (A, b1, n1, B, b2, n2):
     if(POZ_Z_D(b1, n1, A) == 1 and POZ_Z_D(b2, n2, B) == 0):
         return A
     # 9) a = 0   b = 0
-     else: return 0:
+    else:
+        return 0
     
 # Z - 8 - умножение целых чисел
 def MUL_ZZ_Z(b1, n1, A1, b2, n2, A2):
