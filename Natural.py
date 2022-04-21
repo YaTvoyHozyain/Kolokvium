@@ -230,12 +230,14 @@ def DIV_NN_Dk(i, y):
     count = 1
     if COM_NN_D(i, y) == 0:
         return 1, 0
+# если они равны то первый знак- 1
     if COM_NN_D(i, y) == 1:
         big = y
         small = i
     else:
         big = i
         small = y
+# если второе больше первого то меняем
     k = 0
     n3 = small
     tm = small.copy()
