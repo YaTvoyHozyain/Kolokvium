@@ -8,3 +8,15 @@ def INT_TO_ARR(A):
 A = input("Enter the number: ")
 
 print(INT_TO_ARR(A))
+
+
+# Преобразование массива чисел в число
+def ARR_TO_INT(A):
+    A = map(str, A)
+    B = "".join(A)
+    B = int(B)
+
+    return B
+
+A = list(map(int, input("Введите массив чисел: ").split()))
+print(ARR_TO_INT(A))
