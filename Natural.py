@@ -270,7 +270,6 @@ def DIV_NN_Dk(i, y):
 def DIV_NN_N(A, B):
     if COM_NN_D(A, B) != 0:
         m = DIV_NN_Dk(A, B)
-        print(m)
         div = [0]
         # Пусть a >= b
         # Тогда, если на вход задаются числа, не удовлетворяющие этому условию,
