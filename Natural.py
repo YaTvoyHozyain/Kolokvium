@@ -1,7 +1,8 @@
 # N-1 Счастливая
 # Сравнение натуральных чисел: 2 - если первое больше второго,
 # 0 - если равно, иначе 1
-def COM_NN_D(A, B):
+def COM_NN_D(a, b):
+    A, B = copy.copy(a), copy.copy(b)
     # находим первый ненулевой элемент в первом числе
     i = 0
     while A[i] == 0 and i + 1 != len(A):
@@ -61,7 +62,8 @@ def NZER_N_B(i):
 
 # N- 3 Михайлова
 # k - количество разрядов, a - массив цифр числа
-def ADD_1N_N(A):
+def ADD_1N_N(a):
+    A = copy.copy(a)
     A.reverse()
     if COM_NN_D([A[0]], [9]) == 1:
         # Если последняя цифра числа < 9, то добавляем единицу
@@ -86,10 +88,10 @@ def ADD_1N_N(A):
         c[i] = int(A[i])
     return c
 
-
 # N-4 Селиверстов
 # Сложение натуральных чисел
-def ADD_NN_N(A, B):
+def ADD_NN_N(a, b):
+    A, B = copy.copy(a), copy.copy(b)
     # Если первое число больше второго, то меняем их местами
     if COM_NN_D(A, B) == 2:
         A, B = B, A
@@ -125,7 +127,8 @@ def ADD_NN_N(A, B):
 # N- 5 Счастливая
 # Вычитание из первого большего натурального числа
 # второго меньшего или равного
-def SUB_NN_N(A, B):
+def SUB_NN_N(a, b):
+    A, B = copy.copy(a), copy.copy(b)
     # если второе число больше, меняем A и B местами
     if COM_NN_D(A, B) == 1:
         temp = A
@@ -160,7 +163,9 @@ def SUB_NN_N(A, B):
 
 
 # N-6 Махаев
-def MUL_ND_N(A, n):
+# Умножение натурального числа на цифру:
+def MUL_ND_N(a, n):
+    A = copy.copy(a)
     A.reverse()
     A.append(0)
     A.reverse()
@@ -183,10 +188,10 @@ def MUL_ND_N(A, n):
         A.remove(0)
     return A
 
-
 # N-7 Махаев
 # Умножение натурального числа на 10^k
-def MUL_Nk_N(A, k):
+def MUL_Nk_N(a, k):
+    A = copy.copy(a)
     for i in range(k):
         # Цикл по степени десятки, добавляет k нулей в конец массива
         A.append(0)
@@ -219,7 +224,8 @@ def MUL_NN_N(a, b):
 
 # N-9 Моисеев
 # Вычитание из натурального другого натурального, умноженного на цифру для случая с неотрицательным результатом
-def SUB_NDN_N(A, B, n):
+def SUB_NDN_N(a, b, n):
+    A, B = copy.copy(a), copy.copy(b)
     t = SUB_NN_N(A, MUL_ND_N(B, n))
     return t
 
@@ -228,7 +234,8 @@ def SUB_NDN_N(A, B, n):
 # Вычисление первой цифры деления, умноженное на 10^k, k - номер позиции цифры.
 # Преобразование массивов в числа, перемещение большего числа на первое место,
 # нахождение самого числа, ее позиции и результата.
-def DIV_NN_Dk(i, y):
+def DIV_NN_Dk(I, y):
+    i = copy.copy(I)
     count = 1
     if COM_NN_D(i, y) == 0:
         return 1, 0
@@ -267,7 +274,8 @@ def DIV_NN_Dk(i, y):
 # N-11 Михайлова
 # Частное от деления большего натурального числа на
 # меньшее или равное натуральное с остатком(делитель отличен от нуля)
-def DIV_NN_N(A, B):
+def DIV_NN_N(a, b):
+    A, B = copy.copy(a), copy.copy(b)
     if COM_NN_D(A, B) != 0:
         m = DIV_NN_Dk(A, B)
         div = [0]
@@ -295,19 +303,13 @@ def MOD_NN_N(a, b):
     B = copy.copy(b)
     if A != B:
         # Пусть a >= b
-        # Тогда, если на вход задаются числа, не удовлетворяющие этому словию,
+        # Тогда, если на вход задаются числа, не удовлетворяющие этому условию,
         # значения меняются местами
         if COM_NN_D(A, B) == 1:
-            A, b = B, A
-        k = [0]*len(A)
-        n = [0]*len(B)
-        for i in range(len(A)):
-            k[i] = A[i]
-        for i in range(len(B)):
-            n[i] = B[i]
-        c = DIV_NN_N(k, n)
-        mul = MUL_NN_N(B, c)
-        mod = SUB_NN_N(A, mul)
+            A, B = B, A
+        div = DIV_NN_N(A, B)
+        p = MUL_NN_N(div, B)
+        mod = SUB_NN_N(A, p)
         return mod
     else:
         return [0]
@@ -345,11 +347,12 @@ def GCF_NN_N(a, b):
     # НОД у них нет
     else:
         return ("No common dividers")
-
+    
         
 # N-14 Моисеев
 # НОК натуральных чисел
-def LCM_NN_N(A, B):
+def LCM_NN_N(a, b):
+    A, B = copy.copy(a), copy.copy(b)
     if COM_NN_D(A, B) == 1:
         A, B = B, A
     i = copy.copy(A)
