@@ -12,7 +12,6 @@ def ARR_TO_INT(A):
     A = map(str, A)
     B = "".join(A)
     B = int(B)
-
     return B
 
 A = list(map(int, input("Введите массив чисел: ").split()))
