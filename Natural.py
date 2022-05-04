@@ -102,7 +102,6 @@ def ADD_NN_N(A, B):
     B.reverse()
     B.append(0)
     B.reverse()
-    print(A, B)
     # Процесс сложения чисел
     for i in range(len(B) - 1, 0, -1):
         # Если сумма цифр больше десяти,
