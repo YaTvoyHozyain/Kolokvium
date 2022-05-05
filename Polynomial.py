@@ -92,33 +92,34 @@ def DEG_P_N(C):
 # Чтобы найти НОД чисел, сначала нужно поэтапно находить НОД 2 чисел от первого 
 # коэффициента к последнему
 # Чтобы найти НОК чисел, делаем то же самое
-def FAC_P_Q(m, arr):
-    nok = []
-    nod = []
+def FAC_P_Q(m, arr1):
+    nok1 = []
+    nod1 = []
     i = 0
+    j = 0
+    m1 = ARR_TO_INT(m)
     # Переделываем в положительное натуральное
-    for i in range(0, m + 1):
-        if POZ_Z_D(arr[i].A) == 1:
-            arr[i].A = ABS_Z_N(arr[i].A)
+    for i in range(0, m1 + 1):
+        if POZ_Z_D(arr1[i][0],arr1[i][1]) == 1:
+            arr1[i][0] = ABS_Z_N(arr1[i][0],arr1[i][1])
         else:
-            arr[i].A = TRANS_Z_N(arr[i].A)
+            arr1[i][0] = TRANS_Z_N(arr1[i][0],arr1[i][1])
     # Если степень = 0
-    if m == 0:
-        nod = arr[i].A
-        nok = arr[i].B
+    if m1 == 0:
+        nod1 = arr1[i][0]
+        nok1 = arr1[i][2]
     else:
         # Ищем НОК и НОД первых 2 чисел
-        for i in range(0, m + 1):
+        for i in range(0, m1 + 1):
             if i == 0:
-                nod = GCF_NN_N(arr[i].A, arr[i + 1].A)
-                nok = LCM_NN_N(arr[i].B, arr[i + 1].B)
+                nod1 = GCF_NN_N(arr1[i][0], arr1[i + 1][0])
+                nok1 = LCM_NN_N(arr1[i][2], arr1[i + 1][2])
             else:
                 # Ищем НОК и НОД последующих
-                if i < m:
-                    nod = GCF_NN_N(nod, arr[i + 1].A)
-                    nok = LCM_NN_N(nok, arr[i + 1].B)
-    return TRANS_N_Z(nok), TRANS_N_Z(nod)
-
+                if i < m1:
+                    nod1 = GCF_NN_N(nod1, arr1[i + 1][0])
+                    nok1 = LCM_NN_N(nok1, arr1[i + 1][2])
+    return TRANS_N_Z(nok1), TRANS_N_Z(nod1)
    
     
 # P-8 Морик
