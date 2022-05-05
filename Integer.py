@@ -54,11 +54,11 @@ def TRANS_Z_N(A, b):
 
 # Z-6 Булацкий
 # Сложение целых чисел
-# A, B - массивы чисел, ka, kb - знаки (0 - плюс, 1 - минус)
+# A, B - массивы чисел, ka, kb - знаки
 # result - результирующий массив, res_k - знак получившегося числа
 def ADD_ZZ_Z(A, ka, B, kb):
     # Если оба числа равны нулю (POZ_Z_D - проверка на положительность), то их сумма тоже будет равна 0
-    if POZ_Z_D(A, ka) == POZ_Z_D(B, kb) & POZ_Z_D(A, ka) == 0:
+    if POZ_Z_D(A, ka) == POZ_Z_D(B, kb) and POZ_Z_D(A, ka) == 0 and POZ_Z_D(B, kb) == 0 :
         result = [0]
         res_k = 0
     else:
