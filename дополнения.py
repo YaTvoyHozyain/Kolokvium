@@ -1,3 +1,5 @@
+import copy
+
 # Преобразование числа в массив чисел
 def INT_TO_ARR(A):
     A = str(A)
