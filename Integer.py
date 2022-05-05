@@ -123,66 +123,46 @@ def SUB_ZZ_Z (A, b1, B, b2):
     # 0 => a == b
     com = COM_NN_D(A, B)
     # Рассмотрим разные случаи:
-    # 1) Результат сравнения: a > 0   b > 0
-    if(pozA == 2 and pozB == 2):
+    # 1) Результат сравнения: a > 0   b > 0 или a < 0   b < 0
+    if((pozA == 2 and pozB == 2) or (pozA == 1 and pozB == 1)):
         if com == 0:
         # a == b -> результат вычитания 0
             return [0], 0
         # a < b || a > b
         # Функция вычитания расставит числа в нужном порядке
         if (com == 2) or (com == 1):
-            SUB_NN_N(Ai, Bi)
+            ter = SUB_NN_N(Ai, Bi)
             # a > b - проводим
-            # обычное вычитание, иначе - домножаем
-            # результат на (-1) функцией MUL_ZM_Z
-            if com == 1:
-                MUL_ZM_Z(Ai, bi1)
-            return Ai, bi1
-    # 2) Результат сравнения: a < 0   b < 0
-    if(pozA == 1 and pozB == 1):
-        # a == b -> - результат вычитания 0
-        if com == 0:
-            return [0], 0
-        if (com == 2) or (com == 1):
-            # Проводим вычитание
-            SUB_NN_N(Ai, Bi)
-            # Если a > b - разность отрицательна
-            # -> домножаем на (-1) MUL_ZM_Z
-            if com == 2:
-                MUL_ZM_Z(Ai, bi1)
-            return Ai, bi1
-    # 3) Результат сравнения: a > 0   b < 0
-    if(pozA == 2 and pozB == 1):
-        # a == |b| -> - результат вычитания 0
-        if com == 0:
-            return [0], 0
-        # Если 1 число > 0, а 2 < 0,
+            # обычное вычитание, иначе - меняем знак 
+            if com == 1 and pozA == 2 and pozB == 2:
+                bi1 = 1
+            if com == 1 and pozA == 1 and pozB == 1:
+                bi1 = 0
+            return (ter, bi1)
+    # 2) Результат сравнения: a > 0  b < 0 or a < 0  b > 0
+    if((pozA == 2 and pozB == 1) or (pozA == 1 and pozB == 2)):
+        # Если 1 число > 0, а 2 < 0 или
+        # 2 число > 0, а 1 < 0
         # тогда вычитание замещается сложением:
-        ADD_NN_N(Ai, Bi)
-        return Bi, 0
-    # 4) Результат сравнения: a < 0   b > 0
-    if(pozA == 1 and pozB == 2):
-        # Если 1 число < 0, а 2 > 0,
-        # тогда вычитание замещается сложением
-        # с последующим домножением на (-1):
-        ADD_NN_N(Ai, Bi)
-        MUL_ZM_Z(Bi, bi2)
+        ter = ADD_NN_N(Ai, Bi)
+        # Если 2 число > 0, а 1 < 0 ,
+        # то меняем ещё и знак:
+        if(pozA == 1 and pozB == 2):
+            bi1 = 1
+        return ter, bi1
+    # 3) Результат сравнения: a = 0   b >||< 0
+    # Выводим 2 число, с другим знаком
+    if(pozA == 0 and (pozB == 2 or pozB == 1)):
+        if(pozB == 2):
+            bi2 = 1
+        if(pozB == 1):
+            bi2 = 0
         return Bi, bi2
-    # 5) Результат сравнения: a = 0   b > 0
-    if(pozA == 0 and pozB == 2):
-        MUL_ZM_Z(Bi, bi2)
-        return Bi, bi2
-    # 6) Результат сравнения: a = 0   b < 0
-    if(pozA == 0 and pozB == 1):
-        MUL_ZM_Z(B, b2)
-        return Bi, bi2
-    # 7) Результат сравнения: a > 0   b = 0
-    if(pozA == 2 and pozB == 0):
+    # 4) Результат сравнения: a > 0   b = 0
+    # Выводим 1 число
+    if((pozA == 2 or pozA == 1) and pozB == 0):
         return Ai, bi1
-    # 8) Результат сравнения: a < 0   b = 0
-    if(pozA == 1 and pozB == 0):
-        return Ai, bi1
-    # 9) Результат сравнения: a = 0   b = 0
+    # 5) Результат сравнения: a = 0   b = 0
     else:
         return [0], 0
 
