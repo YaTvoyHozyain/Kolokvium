@@ -1,363 +1,387 @@
+class Natural:
+    """
+    Натуральное число
+
+    ввод числа:
+    xy = Natural(input())
+    """
+
+    def __init__(self, number='0'):
+        """
+        Конструктор натурального числа: преобразовывает входные данные
+        в массив цифр в обратном порядке.
+
+        """
+        # преобразуем данные в строку и переворачиваем, так как в будущем так удобнее работать с числом
+        number = str(number)
+        number = number[::-1]
+        # удаление лишних нулей
+        if number[-1] == '0' and len(number) > 1:
+            raise Exception("Invalid initial data entered")
+        # Запись массива цифр в обратном порядке как атрибут класса
+        self.numbers = []
+        for i in number:
+            if i in "0123456789":
+                self.numbers.append(int(i))
+            else:
+                raise Exception("Invalid initial data entered")
+
+    # возвращает строковое представление объекта для функций print() и str()
+
+    def __str__(self):
+        """Возврщает значение натурального числа строкой"""
+        return ''.join([str(i) for i in reversed(self.numbers)])
+
+
 # N-1 Счастливая
 # Сравнение натуральных чисел: 2 - если первое больше второго,
 # 0 - если равно, иначе 1
 def COM_NN_D(a, b):
-    A, B = copy.copy(a), copy.copy(b)
-    # находим первый ненулевой элемент в первом числе
-    i = 0
-    while A[i] == 0 and i + 1 != len(A):
-        i += 1
-    # если количество пройденных элементов равно длине массива,
-    # то число - ноль
-    if i == len(A):
-        A1 = [0]
-        len1 = 1
-    else:
-        # начиная с этого элемента заносим все оставшиеся цифры в новый массив А1,
-        # где len1 - длина нового массива
-        len1 = len(A) - i
-        A1 = A[i:]
-    # аналогично работаем со вторым числом
-    i = 0
-    while B[i] == 0 and i + 1 != len(B):
-        i += 1
-    if i == len(B):
-        B1 = [0]
-        len2 = 1
-    else:
-        len2 = len(B) - i
-        B1 = B[i:]
-    # сравниваем длину чисел, которое длиннее - больше
-    if len1 > len2:
+    # копирование данных
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+    # изначально сравниваем по длине
+    if len(C1.numbers) > len(C2.numbers):
         return 2
-    elif len2 > len1:
+    if len(C1.numbers) < len(C2.numbers):
         return 1
-    # если длины равны
+    # если длина одинаковая, то сравниваем посимвольно, начиная со старшего разряда
     else:
-        i = 0
-        # находим номер несовпадающего элемента массивов
-        while i != len1 and A1[i] == B1[i]:
-            i += 1
-        # если такого числа не нашлось, и количество пройденных
-        # элементов равно длине массива, то они совпадают
-        if i == len1:
-            return 0
-        else:
-            # если несовпадающий элемент первого массива больше,
-            # значит первое число больше, иначе - второе
-            if A1[i] > B1[i]:
-                return 2
-            else:
+        for i in range(len(C1.numbers) - 1, -1, -1):
+            if C1.numbers[i] < C2.numbers[i]:
                 return 1
-
-
-# N-2 Булацкий 
-# Проверка на ноль. Если ноль - выдаем 1, если нет - выдаем 0
-def NZER_N_B(i):
-    if i[0] != 0:
+            elif C1.numbers[i] > C2.numbers[i]:
+                return 2
         return 0
+
+
+# N-2 Булацкий
+# Проверка на ноль
+# i - массив цифр числа
+# Если длина числа 1 и оно-ноль - выдаем 1, если нет - выдаем 0
+def NZER_N_B(i):
+    i = Natural(str(i))
+    if i.numbers[0] == 0 and len(i.numbers) == 1:
+        return False
     else:
-        return 1
+        return True
 
 
 # N- 3 Михайлова
-# k - количество разрядов, a - массив цифр числа
+# Добавление 1 к натуральному числу
+# a - массив цифр числа
 def ADD_1N_N(a):
-    A = copy.copy(a)
-    A.reverse()
-    if COM_NN_D([A[0]], [9]) == 1:
-        # Если последняя цифра числа < 9, то добавляем единицу
-        A[0] += 1
+    # копируем данные
+    C1 = Natural(str(a))
+    # Если в первой же цифре получилось переполнение обрабатываем число по алгоритму
+    if C1.numbers[0] + 1 > 9:
+        # обработка случая, когда C1 это девять, заменяется на ноль, а к массиву добавляется единица
+        if len(C1.numbers) == 1:
+            C1.numbers[0] = 0
+            C1.numbers.append(1)
+        # если же это не девять, то заменяем первую цифру на ноль и начинаем проверять на переполнение следующие цифры
+        else:
+            C1.numbers[0] = 0
+            i = 1
+            while C1.numbers[i] + 1 > 9:
+                C1.numbers[i] = 0
+                i += 1
+                # Если переполнение дошло до последней цифры числа, то добавляем еще 1 разряд.
+                if i == len(C1.numbers):
+                    C1.numbers.append(0)
+            C1.numbers[i] = C1.numbers[i] + 1
+    # Если же переполнения не случилось, то просто прибавляем единицу к первой цифре
     else:
-        i = 0
-        while COM_NN_D(INT_TO_ARR(A[0]), [9]) == 0:
-            # Если последняя цифра числа равна 9, то, пока разряды не перестанут
-            # быть равными 9, заменяем на 0
-            A[i] = 0
-            i += 1
-            # Если преобразования были осуществлены со всеми разрядами,
-            # то добавляем новый разряд
-            if i == len(A):
-                A.append(0)
-            # К первому разряду, не равному 9, добавляем единицу
-        A[i] += 1
-    A.reverse()
-    A = ''.join(map(str, A))
-    c = [0] * len(A)
-    for i in range(len(A)):
-        c[i] = int(A[i])
-    return c
+        C1.numbers[0] = C1.numbers[0] + 1
+    return C1
+
 
 # N-4 Селиверстов
 # Сложение натуральных чисел
 def ADD_NN_N(a, b):
-    A, B = copy.copy(a), copy.copy(b)
-    # Если первое число больше второго, то меняем их местами
-    if COM_NN_D(A, B) == 2:
-        A, B = B, A
-    k = len(B) - len(A)
-    A.reverse()
-    # Дополняем нулями разряды меньшего числа до разрядов большего
-    for i in range(0, ARR_TO_INT(ADD_1N_N(INT_TO_ARR(k)))):
-        A.append(0)
-    A.reverse()
-    B.reverse()
-    B.append(0)
-    B.reverse()
-    # Процесс сложения чисел
-    for i in range(len(B) - 1, 0, -1):
-        # Если сумма цифр больше десяти,
-        # то переносим единицу в старший разряд
-        if type(B[i]) == list:
-            B[i] = ARR_TO_INT(B[i])
-        if type(A[i]) == list:
-            A[i] = ARR_TO_INT(A[i])
-        if COM_NN_D(INT_TO_ARR(B[i] + A[i]), INT_TO_ARR(10)) != 1:
-            B[i] = (B[i] + A[i]) % 10
-            B[i - 1] = ADD_1N_N(INT_TO_ARR(B[i - 1]))
+    # копирование данных
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+    # сравнение, чтобы C1 было меньше
+    if COM_NN_D(C1, C2) == 2:
+        C1, C2 = C2, C1
+    # Переменная, отвечающая за перезагрузку символа, т.е. место для 1 в следующем разряде
+    overflow = 0
+    # Добавление разряда в большее число
+    C2.numbers.append(0)
+    for i in range(len(C1.numbers)):
+        # Складываем поочередно числа столбиком и добавляем единицу переполнения, если она есть
+        C2.numbers[i] = C1.numbers[i] + C2.numbers[i] + overflow
+        # Обработка случая переполнения
+        if C2.numbers[i] > 9:
+            C2.numbers[i] = C2.numbers[i] % 10
+            overflow = 1
         else:
-            B[i] = B[i] + A[i]
-    if type(B[0]) != int:
-        B[0] = ARR_TO_INT(B[0])
-    if COM_NN_D(INT_TO_ARR(B[0]), INT_TO_ARR(0)) == 0:
-        B.remove(0)
-    return B
+            overflow = 0
+        if i == len(C1.numbers) - 1:
+            # случай, когда число C1 уже прибавлено к C2, но осталось переполнение в последнем прибавленном разряде
+            j = i
+            # пока есть переполнение в свободных разрядах С2 прибавляем к текущему разряду 1
+            # если разряд стал > 9 то обнуляем его и идем к следующем разряду
+            while overflow == 1:
+                C2.numbers[j + 1] = C2.numbers[j + 1] + 1
+                if C2.numbers[j + 1] > 9:
+                    C2.numbers[j + 1] = C2.numbers[j + 1] % 10
+                    j += 1
+                else:
+                    # выходим из цикла увеличения свободных разрядов С2
+                    overflow = 0
+            # нет необходимости добавления нового разряда, так как он в любом случае добаляется в начале функции
+            # удаление лишнего нуля, если он есть
+            if len(C2.numbers) > 1 and C2.numbers[-1] == 0:
+                C2.numbers.pop()
+    return C2
 
 
 # N- 5 Счастливая
 # Вычитание из первого большего натурального числа
 # второго меньшего или равного
 def SUB_NN_N(a, b):
-    A, B = copy.copy(a), copy.copy(b)
-    # если второе число больше, меняем A и B местами
-    if COM_NN_D(A, B) == 1:
-        temp = A
-        A = B
-        B = temp
-    # если длины чисел не равны, то добавляем нули в начало второго числа
-    if COM_NN_D(INT_TO_ARR(len(A)), INT_TO_ARR(len(B))) != 0:  # Если длины А и В не равны
-        B.reverse()
-        for i in range(len(A) - len(B)):
-            B.append(0)
-        B.reverse()
-    # вычитание
-    for i in range(len(B) - 1, -1, -1):
-        if COM_NN_D([A[i]], [B[i]]) != 1:  # Если A[i] >= B[i]
-            A[i] -= B[i]
-        else:
-            A[i] = ARR_TO_INT(ADD_NN_N([A[i]], [1, 0])) - B[i]
-            k = i - 1
-            while NZER_N_B([A[k]]) == 1:
-                A[k] = 9
-                k -= 1
-            A[k] -= 1
-    # убираем лишние нули в начале
-    i = 0
-    while NZER_N_B([A[i]]) == 1 and COM_NN_D(INT_TO_ARR(i), INT_TO_ARR(len(A) - 1)) != 0:  # Пока A[i] нуль и индекс i не последний
-        i = ARR_TO_INT(ADD_1N_N(INT_TO_ARR(i)))  # индекс увеличивается на 1
-    if COM_NN_D(INT_TO_ARR(i), INT_TO_ARR(len(A))) == 0:  # Если индекс равен длине
-        A = [0]
-    else:
-        A = A[i:]
-    return A
+    # копирование данных
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+    # если первое число меньше второго то ошибка
+    if COM_NN_D(C1, C2) == 1:
+        raise Exception("The first number is less than the second")
+    # Поочередно проходим по цифрам
+    for i in range(len(C2.numbers)):
+        # Если цифра, которую необходимо отнять больше уменьшаемого, то ищем разряд, у которого можно занять 10
+        if C2.numbers[i] > C1.numbers[i]:
+            # занимаем 10 из другого разряда, j присваиваем i для поиска разряда у которого заняли 10
+            j = i
+            C1.numbers[j] = C1.numbers[j] + 10
+            # собственно поиск разряда у котогоро заняли 10
+            while C1.numbers[j + 1] == 0:
+                C1.numbers[j + 1] = 9
+                j += 1
+            C1.numbers[j + 1] = C1.numbers[j + 1] - 1
+        # вычитаем
+        C1.numbers[i] = C1.numbers[i] - C2.numbers[i]
+
+    # удаление незначающих нулей в старших разрядах разности
+    while len(C1.numbers) > 1 and C1.numbers[-1] == 0:
+        C1.numbers.pop()
+
+    return C1
 
 
 # N-6 Махаев
 # Умножение натурального числа на цифру:
-def MUL_ND_N(a, n):
-    A = copy.copy(a)
-    A.reverse()
-    A.append(0)
-    A.reverse()
-    # Добавляем доп. разряд в начало
-    k = 0
-    for i in range(len(A) - 1, 0, -1):
-        tmp = A[i]
-        A[i] = A[i] * n % 10
-        A[i] = ARR_TO_INT(ADD_NN_N(INT_TO_ARR(A[i]), INT_TO_ARR(k)))
-        k = int(tmp * n / 10)
-        # k - перенос на другой разряд
-        if COM_NN_D(INT_TO_ARR(A[i]), [1, 0]) != 1:
-            # Если после домножения, в разряде числа больше 9, то
-            # разряд числа равен остатку от деления на 10, и
-            # в переменную, отвечающую за доп разряд прибавляем 1
-            A[i] = A[i] % 10
-            k = ARR_TO_INT(ADD_1N_N(INT_TO_ARR(k)))
-    A[0] = k
-    if NZER_N_B(INT_TO_ARR(A[0])) == 1:
-        A.remove(0)
-    return A
+def MUL_ND_N(a, dig):
+    # копируем данные
+    C1 = Natural(str(a))
+    # обработка ошибки
+    if dig < 0 or dig > 9 or type(dig) is not int:
+        raise Exception('Wrong number')
+
+    # добавляем один разряд и обнуляем счетчик займа для разряда
+    C1.numbers.append(0)
+    res = 0
+    # проходим поочередно по цифрам
+    for i in range(len(C1.numbers)):
+        C1.numbers[i] = C1.numbers[i] * dig + res
+        # получаем остаток который надо прибавить к слеующему разряду
+        res = C1.numbers[i] // 10
+        C1.numbers[i] = C1.numbers[i] % 10
+
+    # удаление незначащих нулей
+    while len(C1.numbers) > 1 and C1.numbers[-1] == 0:
+        C1.numbers.pop()
+
+    return C1
+
 
 # N-7 Махаев
 # Умножение натурального числа на 10^k
 def MUL_Nk_N(a, k):
-    A = copy.copy(a)
-    for i in range(k):
-        # Цикл по степени десятки, добавляет k нулей в конец массива
-        A.append(0)
-    return A
+    # копируем данные
+    C1 = Natural(str(a))
+    k = Natural(str(k))
+
+    key = Natural('0')
+    # пока счетчик не будет равен необходимому k добавляем нули в начало массива цифр
+    while COM_NN_D(key, k) != 0:
+        C1.numbers = [0] + C1.numbers
+        key = ADD_1N_N(key)
+
+    # удаление незначащих нулей
+    while len(C1.numbers) > 1 and C1.numbers[-1] == 0:
+        C1.numbers.pop()
+
+    return C1
 
 
 # N-8 Селиверстов
 # Умножение натуральных чисел
 def MUL_NN_N(a, b):
-    A, B = copy.copy(a), copy.copy(b)
-    result = []
-    B.reverse()
-    B.append(0)
-    for i in range(len(B)):
-        temp = []
-        # Умножаем исходное число на текущий разряд
-        if NZER_N_B(INT_TO_ARR(B[i])) == 0:
-            temp = MUL_ND_N(A, B[i])
-        # Умножаем результат на 10^i, чтобы "сдвинуть" его
-        temp = MUL_Nk_N(temp, i)
-        # добавляем к результату
-        if NZER_N_B(INT_TO_ARR(len(result))) == 0:
-            result = ADD_NN_N(result, temp)
-        else:
-            result = temp
-    if NZER_N_B(INT_TO_ARR(result[0])) == 1:
-        del result[0]
-    return result
+    # копирование данных
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+    # создаем переменную, в которую будем сохранять результат
+    ret = Natural('0')
+    # идем по порядку по цифрам одного из числа
+    for i in range(len(C1.numbers)):
+        # сначала умножаем второе число на цифру текущего разряда
+        C3 = MUL_ND_N(C2, C1.numbers[i])
+        # затем умножаем получившееся число на 10 в степени номера позиции той цифры на которую умножали
+        # P.S. счет позиции начинается с 0
+        C3 = MUL_Nk_N(C3, i)
+        # добавляем полученное число к результатут и так для каждой цифры
+        ret = ADD_NN_N(ret, C3)
+
+    return ret
 
 
 # N-9 Моисеев
 # Вычитание из натурального другого натурального, умноженного на цифру для случая с неотрицательным результатом
 def SUB_NDN_N(a, b, n):
-    A, B = copy.copy(a), copy.copy(b)
-    t = SUB_NN_N(A, MUL_ND_N(B, n))
-    return t
+    # копируем данные
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+
+    # домнажаем C2 на цифру
+    C2 = MUL_ND_N(C2, n)
+
+    # если домноженное число больше C1 то выдаем ошибку, так как ответ будет отрицательным
+    if COM_NN_D(C1, C2) == 1:
+        raise Exception('The first number is less than the second')
+
+    # вычитаем из C1 уже домноженное C2
+    C1 = SUB_NN_N(C1, C2)
+
+    return C1
 
 
 # N-10 Булацкий
 # Вычисление первой цифры деления, умноженное на 10^k, k - номер позиции цифры.
 # Преобразование массивов в числа, перемещение большего числа на первое место,
 # нахождение самого числа, ее позиции и результата.
-def DIV_NN_Dk(I, y):
-    i = copy.copy(I)
-    count = 1
-    if COM_NN_D(i, y) == 0:
-        return 1, 0
-    if COM_NN_D(i, y) == 1:
-        big = y
-        small = i
-    else:
-        big = i
-        small = y
-    k = 0
-    n3 = small
-    tm = small.copy()
-    while COM_NN_D(big, n3) == 2:
-        k = ARR_TO_INT(ADD_1N_N(INT_TO_ARR(k)))  # добавление 1 к k
-        n3 = MUL_Nk_N(tm, k)
-        tm = small.copy()
-    k = ARR_TO_INT(SUB_NN_N(INT_TO_ARR(k), [1]))  # вычитаение 1 из k
-    tm = small.copy()
-    n3 = MUL_Nk_N(tm, k)
-    small = n3
-    tm = small.copy()
-    while COM_NN_D(big, n3) == 2:
-        count = ARR_TO_INT(ADD_1N_N(INT_TO_ARR(count)))  # добавление 1 к count
-        n3 = MUL_ND_N(tm, count)
-        tm = small.copy()
-    if COM_NN_D(big, n3) != 0:
-        count = ARR_TO_INT(SUB_NN_N(INT_TO_ARR(count), [1]))  # вычитаение 1 из count
-    if COM_NN_D(INT_TO_ARR(count), [1, 0]) == 0:
-        count = ARR_TO_INT(SUB_NN_N(INT_TO_ARR(count), [1]))  # вычитаение 1 из count
-        k = ARR_TO_INT(ADD_1N_N(INT_TO_ARR(k)))  # добавление 1 к k
-    bb = [count]
-    df = MUL_Nk_N(bb, k)
-    return df
+def DIV_NN_Dk(i, y):
+    # копируем данные
+    C1 = Natural(str(i))
+    C2 = Natural(str(y))
+    # обработка ошибок
+    if not (NZER_N_B(C2)):
+        raise Exception("The divisor must be different from zero")
+    if COM_NN_D(C1, C2) == 1:
+        raise Exception('The first number is less than the second')
+
+    dig = Natural('0')
+    ret = Natural('0')
+    # пока длина второго числа не будет равна длине первого, вставляем нули в начало второго числа, а счётчик
+    # увеличиваем на единицу
+    while len(C2.numbers) != len(C1.numbers):
+        C2.numbers.insert(0, 0)
+        dig = ADD_1N_N(dig)
+    # Если при увеличение длины второго числа, оно стало больше первого, удаляем один символ и вычитаем единицу из
+    # счётчика
+    if COM_NN_D(C1, C2) == 1:
+        C2.numbers.pop(0)
+        dig = SUB_NN_N(dig, 1)
+    # Пока первое число не меньше второго, отнимаем от C1 полученный ранее C2 и увеличиваем новый счётчик на единицу
+    while COM_NN_D(C1, C2) == 2 or COM_NN_D(C1, C2) == 0:
+        C1 = SUB_NN_N(C1, C2)
+        ret = ADD_1N_N(ret)
+
+    # Добавляем к новому счётчику dig нулей
+    ret = MUL_Nk_N(ret, dig)
+
+    return ret
 
 
 # N-11 Михайлова
 # Частное от деления большего натурального числа на
 # меньшее или равное натуральное с остатком(делитель отличен от нуля)
 def DIV_NN_N(a, b):
-    A, B = copy.copy(a), copy.copy(b)
-    if COM_NN_D(A, B) != 0:
-        m = DIV_NN_Dk(A, B)
-        div = [0]
-        # Пусть a >= b
-        # Тогда, если на вход задаются числа, не удовлетворяющие этому условию,
-        # значения меняются местами
-        if COM_NN_D(A, B) == 1:
-            A, B = B, A
-        # Частное от деления a на b
-        while COM_NN_D(A, B) != 1:  # пока A >= B
-            A = SUB_NN_N(A, B)
-            if NZER_N_B(INT_TO_ARR(B[0])) == 1:
-                del B[0]
-            div = ADD_1N_N(div)
-        return div
+    # копируем данные
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+    # Если второе число 0, то выдаем ошибку
+    if not (NZER_N_B(C2)):
+        raise Exception("The divisor must be different from zero")
+
+    ret = Natural('0')
+    # если первое числа меньше второго, то целое = 0
+    if COM_NN_D(C1, C2) == 1:
+        return Natural('0')
+    # если числа равны, то целое = 1
+    elif COM_NN_D(C1, C2) == 0:
+        return Natural('1')
     else:
-        return [1]
-    
-    
+        # пока C1 не меньше С2 ищем первые цифры деления как в функции DIV_NN_Dk, постоянное уменьшая делимое
+        # складывая их получаем целое
+        while COM_NN_D(C1, C2) == 2 or COM_NN_D(C1, C2) == 0:
+            res = DIV_NN_Dk(C1, C2)
+            ret = ADD_NN_N(ret, res)
+            res = MUL_NN_N(res, C2)
+            C1 = SUB_NN_N(C1, res)
+
+        return ret
+
+
 # N-12 Михайлова
 # Остаток от деления большего натурального числа на меньшее
 # или равное натуральное с остатком(делитель отличен от нуля)
 def MOD_NN_N(a, b):
-    A = copy.copy(a)
-    B = copy.copy(b)
-    if A != B:
-        # Пусть a >= b
-        # Тогда, если на вход задаются числа, не удовлетворяющие этому условию,
-        # значения меняются местами
-        if COM_NN_D(A, B) == 1:
-            A, B = B, A
-        div = DIV_NN_N(A, B)
-        p = MUL_NN_N(div, B)
-        mod = SUB_NN_N(A, p)
-        return mod
+    # копируем данные
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+    # Если второе число 0, то рейзим ошибку
+    if not (NZER_N_B(C2)):
+        raise Exception("The divisor must be different from zero")
+
+    # если первое числа меньше второго, то целое = 0
+    if COM_NN_D(C1, C2) == 1:
+        return C1
+    # если числа равны, то целое = 1
+    elif COM_NN_D(C1, C2) == 0:
+        return Natural('0')
     else:
-        return [0]
-    
-    
+        # пока C1 не меньше С2 ищем первые цифры деления как в функции DIV_NN_Dk, постоянное уменьшая делимое
+        # в результате C1 и будет остатком
+        while COM_NN_D(C1, C2) == 2:
+            res = DIV_NN_Dk(C1, C2)
+            res = MUL_NN_N(res, C2)
+            C1 = SUB_NN_N(C1, res)
+
+        return C1
+
+
 # N-13 Горевская
 # НОД натуральных чисел
 def GCF_NN_N(a, b):
-    A, B = copy.copy(a), copy.copy(b)
-    # Вычисление НОД натуральных чисел
-    # Проверка на ноль
-    if NZER_N_B(A) == 0 and NZER_N_B(B) == 0:
-        # Сравнение чисел
-        temp = COM_NN_D(A, B)
-        # Если первое число меньше второго -
-        # меняем их местами
-        if temp == 1:  # если temp равно 1
-            A, B = B, A
-            temp = 2
-        # Если первое число больше второго -
-        # вычисляем НОД с помощью алгоритма
-        # Евклида
-        if temp == 2:  # если temp равно 2
-            while NZER_N_B(B) == 0:  # если B[0] не нуль
-                rem = MOD_NN_N(A, B)
-                if NZER_N_B(rem) == 1:
-                    return B
-                A = B
-                B = rem
-        # Если числа равны - любое из них
-        # и есть их НОД
-        if NZER_N_B(INT_TO_ARR(temp)) == 1:  # если равно нулю
-            return B
-    # Если какое-то из чисел равно нулю, тогда
-    # НОД у них нет
-    else:
-        return ("No common dividers")
-    
-        
+    # копируем данные
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+
+    if COM_NN_D(C1, Natural('0')) == 0 and COM_NN_D(C2, Natural('0')) == 0:
+        raise Exception("two numbers are zero")
+
+    # пока хотя бы одно из чисел не ноль, отнимаем от большего меньшее
+    while NZER_N_B(C1) and NZER_N_B(C2):
+        if COM_NN_D(C1, C2) == 2:
+            C1 = MOD_NN_N(C1, C2)
+        else:
+            C2 = MOD_NN_N(C2, C1)
+
+        # в результате сумма этих двух чисел и будет НОДом
+    return ADD_NN_N(C1, C2)
+
+
 # N-14 Моисеев
 # НОК натуральных чисел
 def LCM_NN_N(a, b):
-    A, B = copy.copy(a), copy.copy(b)
-    if COM_NN_D(A, B) == 1:
-        A, B = B, A
-    i = copy.copy(A)
-    while True:
-        if NZER_N_B(MOD_NN_N(i, A)) == 1 and NZER_N_B(MOD_NN_N(i, B)) == 1:
-            break
-        i = ADD_1N_N(i)
-    return i
+    # копируем данные
+    C1 = Natural(str(a))
+    C2 = Natural(str(b))
+
+    # НОК = C1*C2/НОД(C1,C2)
+    GCF = GCF_NN_N(C1, C2)
+    C1 = MUL_NN_N(C1, C2)
+
+    return DIV_NN_N(C1, GCF)
